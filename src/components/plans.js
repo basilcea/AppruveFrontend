@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { Typography, Button, notification } from "antd";
 import styled from 'styled-components';
 import response from "../data";
-const { Paragraph } = Typography;
 
-const Plans = () => {
+
+const Plans = (props) => {
   const [pageDetails, setPageDetails] = useState([]);
   const [subscribe, setSubscribe] = useState((false , ''));
   useEffect(() => {
@@ -12,22 +11,17 @@ const Plans = () => {
   }, []);
   const clicked = async (title) => {
     setSubscribe((true , title ) );
-    subscribe && openNotification(title);
+    subscribe && props.subscribe(title);
   };
-  const openNotification = (title) => {
-    notification.open({
-      message: "Subscription Successful",
-      description: `You have successfully subscribed to the ${title} plan. Enjoy your 30 days trial`,
-    });
-  };
+
   return (
     <Container>
       {pageDetails &&
         pageDetails.map((singlePlan) => {
           return (
             <Card>
-            <h3 style={{color: singlePlan.color}}> {singlePlan.title}</h3>
-              <p>${singlePlan.price}</p>
+            <H3 style={{color: singlePlan.color}}> {singlePlan.title}</H3>
+            <Price><span>$ {singlePlan.price}</span> month</Price>
               <div>
                 {singlePlan.inclusions.map((service) => {
                   return <p> {service}</p>;
@@ -41,7 +35,6 @@ const Plans = () => {
             </Card>
           );
         })}
-       {subscribe[0] && openNotification(subscribe[1])}
     </Container>
   );
 };
@@ -51,15 +44,37 @@ export default Plans;
 const Container = styled.div`
 display:flex;
 height: 50vh;
-margin-top: 3rem;
-justify-content:center;
+width: 80vw;
+margin-top: 5rem;
+justify-content:space-between;
 
 `;
 const Card = styled.div`
 width: 30%;
 height: 100%;
-
+background-color:white;
+display:flex;
+flex-direction:column;
+align-items:center;
+justify-content:center;
+border-radius:0.5rem;
 `
 const H3 = styled.h3`
+line-height:5rem;
+width:90%;
+margin: 0 5%;
+border-bottom:1px solid lightgrey;
  
 `
+const Price = styled.p`
+line-height:3rem;
+width:90%;
+margin: 0 5%;
+border-bottom:1px solid lightgrey;
+padding: 1rem 0;
+span{
+    font-size:2rem;
+    font-weight:bold;
+    color:  #b2b7bf;
+}
+`;
